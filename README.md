@@ -9,7 +9,7 @@ A simple toolkit for setting up Nginx reverse proxy with automatic SSL certifica
 2.  Clone this repository:
 
     ```bash
-    git clone [https://github.com/superdoccimo/rev.git](https://github.com/superdoccimo/rev.git) 
+    git clone https://github.com/superdoccimo/rev.git
 
     cd rev 
     ```
