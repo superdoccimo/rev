@@ -1,0 +1,28 @@
+# docker-compose.yml
+
+services:
+  nginx-proxy:
+    build: .
+    container_name: proxy-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./logs:/var/log/nginx
+      - ./certbot/www:/var/www/certbot       # ACME Challenge 用のWebroot
+      - ./certbot/conf:/etc/letsencrypt      # 証明書ファイル格納
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      # - ./ads.txt:/var/www/html/ads.txt    # もしads.txtが必要ならホストにファイルがあるか要確認
+    restart: unless-stopped
+
+  # Certbot の自動更新コンテナ例
+  certbot:
+    image: certbot/certbot
+    container_name: proxy-certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; kill -HUP $$(docker inspect --format=\"{{.State.Pid}}\" proxy-nginx-proxy-1); sleep 12h & wait $${!}; done;'"
+    restart: unless-stopped
