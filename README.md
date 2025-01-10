@@ -79,10 +79,11 @@ If you encounter any issues:
 
 ## Additional Resources
 
-* [Tutorial Blog](ここにチュートリアルのブログ記事へのリンク)
-* [Setup Guide Blog Post](ここにセットアップガイドのブログ記事へのリンク)
-* [Video Tutorial](ここにビデオチュートリアルへのリンク)
-* [Setup Guide Video](ここにセットアップガイドビデオへのリンク)
+* [Tutorial Blog](https://showa.fun/reverse-proxy-docker)
+* [Tutorial Blog(Japanese)](https://minokamo.tokyo/2025/01/04/8344/)
+* [Tutorial Blog(Hindi)](https://minokamo.in/reverse-proxy-ssl)
+* [Video Tutorial](https://youtu.be/4flonaHs4mE)
+* [Video Tutorial(Japanese)](https://youtu.be/z0VjHrVSv34)
 
 ## License
 

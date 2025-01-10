@@ -1,12 +1,12 @@
 # Dockerfile
 FROM nginx:alpine
 
-# Nginx の設定ファイルをコンテナにコピー
+# Copy Nginx configuration files into the container
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
 
-# 必要に応じて追加の操作をここに書く
+# Add additional operations here as needed
 # RUN apk add --no-cache ...
 
-# コンテナ起動時に Nginx を前景モードで実行
+# Run Nginx in the foreground when the container starts
 CMD ["nginx", "-g", "daemon off;"]

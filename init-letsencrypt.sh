@@ -1,37 +1,37 @@
 #!/bin/bash
 
-# root権限チェック
+# Check for root privileges
 if [ "$(id -u)" != "0" ]; then
-    echo "このスクリプトはroot権限で実行する必要があります"
-    echo "sudo ./init-letsencrypt.sh を実行してください"
+    echo "This script must be run as root."
+    echo "Please run it with sudo: sudo ./init-letsencrypt.sh"
     exit 1
 fi
 
 # ==========================
-# 変数設定
+# Variable settings
 # ==========================
 domains=(abc.com)
 email="admin@abc.com"
-staging=0  # 1 = テストモード、0 = 本番モード
+staging=0  # 1 = Staging mode, 0 = Production mode
 # ==========================
 
-echo "セットアップを開始します..."
+echo "Starting setup..."
 
-# クリーンアップ
-echo "1. 環境をクリーンアップしています..."
+# Cleanup
+echo "1. Cleaning up the environment..."
 docker compose down
 rm -rf certbot
 mkdir -p certbot/conf
 mkdir -p certbot/www/.well-known/acme-challenge
 chmod -R 755 certbot
 
-# テストファイル作成
+# Create test file
 echo "Hello, Let's Encrypt!" > certbot/www/.well-known/acme-challenge/test.txt
 chmod -R 755 certbot/www
 
-# Nginxの設定準備
-echo "2. Nginx設定を準備しています..."
-# HTTPSブロックを一時的に無効化した設定を作成
+# Preparing Nginx configuration
+echo "2. Preparing Nginx configuration..."
+# Create a configuration with the HTTPS block temporarily disabled
 cat > default.conf << 'EOL'
 map $http_upgrade $connection_upgrade {
     default upgrade;
@@ -53,25 +53,25 @@ server {
 }
 EOL
 
-# ドメイン名を置換
+# Replace domain name
 sed -i "s/DOMAIN_NAME/${domains[0]}/g" default.conf
 
-echo "3. Nginxを起動しています..."
+echo "3. Starting Nginx..."
 docker compose up -d nginx-proxy
 sleep 10
 
-# ACMEチャレンジのテスト
-echo "4. ACMEチャレンジのアクセステスト..."
+# Test ACME challenge
+echo "4. Testing access to ACME challenge..."
 curl -v http://${domains[0]}/.well-known/acme-challenge/test.txt
 if [ $? -ne 0 ]; then
-    echo "警告: ACMEチャレンジのテストに失敗しました"
-    echo "Nginxのログを確認します..."
+    echo "Warning: ACME challenge test failed."
+    echo "Checking Nginx logs..."
     docker compose logs nginx-proxy
-    echo "5秒後に続行します..."
+    echo "Continuing in 5 seconds..."
     sleep 5
 fi
 
-echo "5. Let's Encrypt証明書を取得しています..."
+echo "5. Obtaining Let's Encrypt certificate..."
 docker run -it --rm \
     -v "$PWD/certbot/www:/var/www/certbot" \
     -v "$PWD/certbot/conf:/etc/letsencrypt" \
@@ -86,22 +86,22 @@ docker run -it --rm \
     $( [ $staging -eq 1 ] && echo "--staging" ) \
     -v
 
-# 証明書の確認
+# Verify certificate
 if [ ! -f "./certbot/conf/live/${domains[0]}/fullchain.pem" ]; then
-    echo "エラー: 証明書の取得に失敗しました。"
-    echo "Nginxのログを確認:"
+    echo "Error: Failed to obtain certificate."
+    echo "Check Nginx logs:"
     docker compose logs nginx-proxy
     exit 1
 fi
 
-echo "6. 証明書のパーミッションを設定しています..."
+echo "6. Setting certificate permissions..."
 chmod -R 755 certbot/conf
 find certbot/conf -type d -exec chmod 755 {} \;
 find certbot/conf -type f -exec chmod 644 {} \;
 chmod 600 certbot/conf/live/${domains[0]}/privkey.pem
 
-echo "7. HTTPS設定を有効化しています..."
-# 完全な設定を作成
+echo "7. Enabling HTTPS configuration..."
+# Create full configuration
 cat > default.conf << 'EOL'
 map $http_upgrade $connection_upgrade {
     default upgrade;
@@ -151,22 +151,22 @@ server {
 }
 EOL
 
-# ドメイン名を置換
+# Replace domain name
 sed -i "s/DOMAIN_NAME/${domains[0]}/g" default.conf
 
-echo "8. Nginxを再起動しています..."
+echo "8. Restarting Nginx..."
 docker compose down
 docker compose up -d
 sleep 5
 
-echo "セットアップが完了しました！"
+echo "Setup is complete!"
 echo ""
-echo "重要な情報:"
-echo "現在のモード: $([ $staging -eq 1 ] && echo 'テストモード' || echo '本番モード')"
-echo "設定したドメイン: ${domains[0]}"
+echo "Important information:"
+echo "Current mode: $([ $staging -eq 1 ] && echo 'Staging mode' || echo 'Production mode')"
+echo "Configured domain: ${domains[0]}"
 echo ""
-echo "次のステップ:"
-echo "1. https://${domains[0]} にアクセスしてHTTPSが機能していることを確認してください"
+echo "Next steps:"
+echo "1. Access https://${domains[0]} to ensure HTTPS is functioning correctly."
 echo ""
-echo "エラーが発生した場合は以下のコマンドでログを確認できます:"
+echo "If an error occurs, you can check the logs with the following command:"
 echo "docker compose logs nginx-proxy"
