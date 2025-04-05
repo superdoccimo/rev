@@ -79,7 +79,7 @@ If you encounter any issues:
 
 ## Additional Resources
 
-* [Tutorial Blog](https://showa.fun/reverse-proxy-docker)
+* [Tutorial Blog](https://betelgeuse.work/reverse-proxy-docker)
 * [Tutorial Blog(Japanese)](https://minokamo.tokyo/2025/01/04/8344/)
 * [Tutorial Blog(Hindi)](https://minokamo.in/reverse-proxy-ssl)
 * [Video Tutorial](https://youtu.be/4flonaHs4mE)
