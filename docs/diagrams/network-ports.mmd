@@ -1,0 +1,11 @@
+flowchart TB
+    subgraph Container: Nginx
+      direction TB
+      P80[[Listen 80]]
+      P443[[Listen 443]]
+      CF[/etc/letsencrypt → certbot/conf/]
+      WR[/var/www/certbot → certbot/www/]
+    end
+    P80 -. Host bind .- H80[(Host:80)]
+    P443 -. Host bind .- H443[(Host:443)]
+

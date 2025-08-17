@@ -1,0 +1,22 @@
+flowchart LR
+    %% アーキテクチャ概要図（README 簡易版の詳細）
+    user[ブラウザ / クライアント]
+    subgraph Host[ホスト]
+      direction LR
+      nginx[Nginx リバースプロキシ(コンテナ)]
+      subgraph Certbot Assets
+        WWW[/certbot/www/\n(ACME Webroot)/]
+        CONF[/certbot/conf/\n(LE アカウントと証明書)/]
+      end
+    end
+
+    user -- HTTPS 443 --> nginx
+    user -- HTTP 80 (リダイレクト) --> nginx
+    nginx --- WWW
+    nginx --- CONF
+    nginx -- プロキシ(HTTP/WS) --> app[上流アプリ(ホスト or 他コンテナ)]
+
+    %% 注釈
+    note over nginx: /etc/letsencrypt -> CONF\n/var/www/certbot -> WWW
+    note right of user: HSTSにより以降は常にHTTPS接続
+

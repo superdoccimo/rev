@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant U as 管理者/スクリプト
+    participant N as Nginx(コンテナ)
+
+    U->>N: nginx -t (設定テスト)
+    alt 成功
+        U->>N: nginx -s reload (マスタがSIGHUP→ワーカーはグレースフル)
+        Note right of N: ゼロダウンタイムで設定反映
+    else 失敗
+        U->>U: 設定修正/ログ確認 (docker logs proxy-nginx)
+        U->>N: 必要時のみ再起動
+    end
+

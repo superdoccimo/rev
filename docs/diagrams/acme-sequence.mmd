@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    participant U as あなた(スクリプト実行)
+    participant N as Nginx(HTTPのみ)
+    participant C as Certbot(Docker)
+    participant CA as Let's Encrypt
+
+    U->>N: HTTP用 default.conf を配置し起動
+    U->>C: certonly --webroot を実行
+    C->>CA: 証明書の発行を要求
+    CA->>N: GET /.well-known/acme-challenge/<token>
+    N->>N: /var/www/certbot からトークンを配信
+    N-->>CA: 200 OK
+    CA-->>C: 検証OK → 証明書発行
+    C->>U: certbot/conf/live/ に配置
+    U->>N: HTTPSサーバブロックを書き出し
+    U->>N: nginx -t 成功なら -s reload
+    alt テスト失敗
+        U->>U: docker compose logs nginx-proxy でログ確認
+    end
+

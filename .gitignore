@@ -1,0 +1,10 @@
+# Secrets
+certbot/conf/cloudflare.ini
+
+# Editors
+.DS_Store
+.idea/
+.vscode/
+
+# Local env
+.env

@@ -1,0 +1,17 @@
+sequenceDiagram
+    autonumber
+    participant CR as Cron/systemd
+    participant RS as renew.sh(ホスト)
+    participant C as Certbot(Docker)
+    participant N as Nginx(コンテナ)
+
+    CR->>RS: スケジュールで起動 (例: 1日2回)
+    RS->>C: certbot renew --webroot
+    C->>C: 期限が近い証明書のみ更新
+    RS->>N: docker exec で nginx -t
+    alt 成功
+        RS->>N: nginx -s reload (ゼロダウンタイム)
+    else 失敗
+        RS->>RS: ログ確認 (docker logs proxy-nginx)
+    end
+

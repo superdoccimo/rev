@@ -16,13 +16,5 @@ services:
       # - ./ads.txt:/var/www/html/ads.txt    # If ads.txt is needed, ensure the file exists on the host
     restart: unless-stopped
 
-  # Example of an automatic renewal container for Certbot
-  certbot:
-    image: certbot/certbot
-    container_name: proxy-certbot
-    volumes:
-      - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
-      - /var/run/docker.sock:/var/run/docker.sock
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; kill -HUP $$(docker inspect --format=\"{{.State.Pid}}\" proxy-nginx-proxy-1); sleep 12h & wait $${!}; done;'"
-    restart: unless-stopped
+  # Tip: For automatic renewal, prefer a host cron calling `./renew.sh`.
+  # This avoids brittle in-container Docker signaling and keeps the nginx image minimal.
