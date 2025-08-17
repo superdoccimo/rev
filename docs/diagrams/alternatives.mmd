@@ -1,9 +1,9 @@
 flowchart TD
-    A[現行: HTTP-01 で取得\n80番公開必須/シンプル] -->|メリット| AOK[構築が容易\nCDN不要]
-    A -->|デメリット| ANG[80番塞がれていると不可\nWAF/CDN前段で注意]
+    A[現行: HTTP-01 で取得<br/>80番公開必須/シンプル] -->|メリット| AOK[構築が容易<br/>CDN不要]
+    A -->|デメリット| ANG[80番塞がれていると不可<br/>WAF/CDN前段で注意]
 
-    B[DNS-01: TXT レコードで検証\nワイルドカード可] -->|メリット| BOK[80/443不要\n*.<domain>対応]
-    B -->|デメリット| BNG[DNS APIの権限が必要\n自動化がやや複雑]
+    B[DNS-01: TXT レコードで検証<br/>ワイルドカード可] -->|メリット| BOK[80/443不要<br/>*.<domain>対応]
+    B -->|デメリット| BNG[DNS APIの権限が必要<br/>自動化がやや複雑]
 
-    C[CDN/WAF 前段(Cloudflare等)] -->|注意| CNOTE[HTTP-01はオリジン80番へ到達が必要\n到達不可ならDNS-01へ]
+    C[CDN/WAF 前段<br/>Cloudflare等] -->|注意| CNOTE[HTTP-01はオリジン80番へ<br/>到達が必要<br/>到達不可ならDNS-01へ]
 

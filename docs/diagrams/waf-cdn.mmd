@@ -1,13 +1,13 @@
 flowchart LR
     user[ブラウザ]
-    cf[CDN/WAF (例: Cloudflare)]
-    nginx[Nginx(オリジン)]
+    cf[CDN/WAF<br/>例: Cloudflare]
+    nginx[Nginx オリジン]
 
     user --> cf
     cf -->|HTTPS/HTTP| nginx
 
-    subgraph 注意点
-      N1[HTTP-01を使う場合、\n/.well-known/acme-challenge/ が\nCDNを経由して80番でオリジンに到達する必要]
-      N2[到達しない/キャッシュされる場合は\nDNS-01 方式に切替]
+    subgraph note [注意点]
+      N1[HTTP-01を使う場合<br/>/.well-known/acme-challenge/<br/>がCDNを経由して80番で<br/>オリジンに到達する必要]
+      N2[到達しない/キャッシュされる場合<br/>DNS-01 方式に切替]
     end
 
