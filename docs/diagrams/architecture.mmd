@@ -6,8 +6,8 @@ flowchart TB
         nginx[Nginx リバースプロキシ<br/>コンテナ]
         
         subgraph assets [Certbot Assets]
-            WWW[/certbot/www/<br/>ACME Webroot]
-            CONF[/certbot/conf/<br/>LE アカウントと証明書]
+            WWW["certbot/www<br/>ACME Webroot"]
+            CONF["certbot/conf<br/>LE アカウントと証明書"]
         end
         
         app[上流アプリ<br/>ホスト or 他コンテナ]
