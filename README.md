@@ -227,8 +227,9 @@ See detailed diagrams under `docs/diagrams/` (alternatives, zero-downtime, waf/c
 
 ## Additional Resources
 
-* [Tutorial Blog](https://betelgeuse.work/reverse-proxy-docker)
-* [Tutorial Blog(Japanese)](https://minokamo.tokyo/2025/01/04/8344/)
+* [Tutorial Blog](https://vibelsd.com/reverse-proxy-docker/)
+* [Tutorial Blog 1(Japanese)](https://minokamo.tokyo/2025/09/08/9315/)
+* [Tutorial Blog 2(Japanese)](https://minokamo.tokyo/2025/01/04/8344/)
 * [Tutorial Blog(Hindi)](https://minokamo.in/reverse-proxy-ssl)
 * [Video Tutorial](https://youtu.be/4flonaHs4mE)
 * [Video Tutorial(Japanese)](https://youtu.be/z0VjHrVSv34)
